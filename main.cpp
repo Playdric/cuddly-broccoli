@@ -192,11 +192,12 @@ int main(int argc, char const *argv[]) {
             vector<float> vec = vector<float>();
             vec.push_back(cp[0] - pod.getX());
             vec.push_back(cp[1] - pod.getY());
-            if (getDistanceBetween(cp, pod) < cp[2]*2) {
+            if (getDistanceBetween(cp, pod) < cp[2]) {
                 currentCP.at(i)+=1;
                 if (currentCP.at(i) == numberOfCp) {
                     myPods.erase(myPods.begin() + i);
                     numberOfPods--;
+                    cout << "0 0" << endl;
                     continue;
                 }
             }
