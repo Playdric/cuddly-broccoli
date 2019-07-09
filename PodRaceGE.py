@@ -13,10 +13,10 @@ except Exception as e:
 
 NB_PODS = 3
 POD_RADIUS = 10
-FRICTION = 0.005
+FRICTION = 0.5
 WIDTH = 800
 HEIGHT = 800
-TIME = 1
+TIME = 5
 MAX_TRUST = 100
 MAX_TURN = 15
 
@@ -148,6 +148,7 @@ class Pod(Element):
         if self.next_check >= len(checkpoints):
             return True
         while checkpoints[self.next_check].contains_center(self):
+            print("touche un CP", file=sys.stderr)
             self.next_check+=1
             if self.next_check >= len(checkpoints):
                 return True
@@ -240,6 +241,7 @@ def init_game(nb):
    
 
     nb_checks =  random.randint(1,10)
+    nb_checks = 2
     while len(checkpoints) < nb_checks:
         radius = random.randint(10,WIDTH/20)
         e = Element(random.randint(100+radius,WIDTH-radius),
