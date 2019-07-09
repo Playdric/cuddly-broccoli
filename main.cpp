@@ -97,7 +97,7 @@ int main(int argc, char const *argv[]) {
     //Environments params :
     int width, height;
 
-    //cerr << "====== START IA PROGRAM " << getpid() << " ======" << endl;
+    cerr << "====== START IA PROGRAM " << getpid() << " ======" << endl;
     nextInputMustBe("START player");
     cin >> myPlayerNumber;
     cin >> ws;
@@ -105,7 +105,6 @@ int main(int argc, char const *argv[]) {
 
 
     nextInputMustBe("START settings");
-    //cerr << getpid() << " SETTINGS :" << endl;
     do {
         getline(cin, input);
         //Get the number of pods for this 'IA'
@@ -133,9 +132,6 @@ int main(int argc, char const *argv[]) {
                 arr[2] = atoi(vStr[2].c_str());
                 vWalls.push_back(arr);
             }
-            for (unsigned i = 0; i < vWalls.size(); i++) {
-                //cerr << getpid() << " WALL : " << vWalls.at(i)[0] << ", " << vWalls.at(i)[1] << ", " << vWalls.at(i)[2] << endl;
-            }
         }
         // Get the CP and their position and size
         if (input.find("CHECKPOINTS") != string::npos) {
@@ -150,14 +146,10 @@ int main(int argc, char const *argv[]) {
                 arr[2] = atoi(vStr[2].c_str());
                 vCp.push_back(arr);
             }
-            for (unsigned i = 0; i < vCp.size(); i++) {
-                //cerr << getpid() << " CP : " << vCp.at(i)[0] << ", " << vCp.at(i)[1] << ", " << vCp.at(i)[2] << endl;
-            }
         }
     } while(input != "STOP settings");
-    //cerr << getpid() << " END of SETTINGS" << endl;
 
-    for (int i = 0; i < numberOfCp; i++) {
+    for (int i = 0; i < numberOfPods; i++) {
         currentCP.push_back(0);
     }
     
@@ -167,24 +159,23 @@ int main(int argc, char const *argv[]) {
 
         myPods.clear();
         
-        getline(cin, input);
-        //cerr << "------------------> " << input << endl;
-        boost::split(vStr, input, boost::is_any_of(" "));
-        if (myPlayerNumber == atoi(vStr[0].c_str())) {
-            Pod p = Pod();
-            p.setX(atoi(vStr[2].c_str()));
-            p.setY(atoi(vStr[3].c_str()));
-            p.setVx(atoi(vStr[4].c_str()));
-            p.setVy(atoi(vStr[5].c_str()));
-            p.setDir(atoi(vStr[6].c_str()));
-            p.setHealth(atoi(vStr[7].c_str()));
-            myPods.push_back(p);
+        for (int i = 0; i < numberOfPods; i++) {
+            getline(cin, input);
+            boost::split(vStr, input, boost::is_any_of(" "));
+            if (myPlayerNumber == atoi(vStr[0].c_str())) {
+                Pod p = Pod();
+                p.setX(atoi(vStr[2].c_str()));
+                p.setY(atoi(vStr[3].c_str()));
+                p.setVx(atoi(vStr[4].c_str()));
+                p.setVy(atoi(vStr[5].c_str()));
+                p.setDir(atoi(vStr[6].c_str()));
+                p.setHealth(atoi(vStr[7].c_str()));
+                myPods.push_back(p);
+            }
         }
-        //cerr << "------>" << pod << endl;
-        getline(cin, input);
+        nextInputMustBe("STOP turn");
         
         cout << "START action" << endl;
-        cerr << "START action" << endl;
 
         for (int i = 0; i < numberOfPods; i++) {
             Pod pod = myPods.at(i);
@@ -207,18 +198,14 @@ int main(int argc, char const *argv[]) {
                 thrust = 0;
             }
             cout << rotation << " " << thrust;
-            cerr << rotation << " " << thrust;
             if (i == (numberOfPods - 1)) {
                 cout << endl;
-                cerr << endl;
             } else {
-                cout << ";" << endl;
-                cerr << ";" << endl;
+                cout << ";";
             }
         }
 
         cout << "STOP action" << endl;
-        cerr << "STOP action" << endl;
 
         if (numberOfPods == 0) {
             break;
