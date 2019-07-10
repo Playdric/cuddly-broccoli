@@ -11,6 +11,7 @@ using namespace std;
 float MAX_SPEED = 1000.0f;
 float MIN_SPEED = 200.0f;
 float MAX_THRUST = 100.0f;
+float MIN_THRUST = 10.0f;
 float EXPO = 1.2f;
 
 
@@ -67,7 +68,7 @@ float getThrust(Pod pod, array<int, 3> cp) {
 
     if (dot(vec, speed) > 0.5) {
         if (normSpeed > MAX_SPEED){
-            return 0;
+            return MIN_THRUST;
         }
         if (normSpeed < MIN_SPEED){
             return MAX_THRUST;
@@ -100,11 +101,13 @@ int main(int argc, char const *argv[]) {
     if (argc > 1)
         MAX_THRUST = atoi(argv[1]);
     if (argc > 2)
-        EXPO = atoi(argv[2]);
+        MAX_THRUST = atoi(argv[2]);
     if (argc > 3)
-        MIN_SPEED = atoi(argv[3]);
+        EXPO = atoi(argv[3]);
     if (argc > 4)
-        MAX_SPEED = atoi(argv[4]);
+        MIN_SPEED = atoi(argv[4]);
+    if (argc > 5)
+        MAX_SPEED = atoi(argv[5]);
     
 
 
@@ -208,7 +211,6 @@ int main(int argc, char const *argv[]) {
             float rotation = getRotation(pod, vCp.at(currentCP.at(i)));
             float thrust = getThrust(pod, vCp.at(currentCP.at(i)));
             cout << rotation << " " << thrust;
-            cerr << rotation << " " << thrust << endl;
             if (i == (numberOfPods - 1)) {
                 cout << endl;
             } else {
