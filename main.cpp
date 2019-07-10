@@ -8,7 +8,7 @@
 
 using namespace std;
 
-float MAX_SPEED = 100000.0f;
+float MAX_SPEED = 1000.0f;
 float MIN_SPEED = 200.0f;
 float MAX_THRUST = 100.0f;
 float EXPO = 1.2f;
@@ -18,7 +18,7 @@ void nextInputMustBe(string nextInput) {
     string input;
     getline(cin, input);
     if (input.compare(nextInput) != 0) {
-        cerr << "DEBUG " << getpid() <<  "input was '" << input << "' but expected '" << nextInput << "'" << endl;
+        cerr << "DEBUG " << getpid() <<  " input was '" << input << "' but expected '" << nextInput << "'" << endl;
         exit(0);
     }
     //cerr << getpid() <<  "Input correct : '" << input << "'" << endl;
@@ -97,6 +97,17 @@ int main(int argc, char const *argv[]) {
     //Environments params :
     int width, height;
 
+    if (argc > 1)
+        MAX_THRUST = atoi(argv[1]);
+    if (argc > 2)
+        EXPO = atoi(argv[2]);
+    if (argc > 3)
+        MIN_SPEED = atoi(argv[3]);
+    if (argc > 4)
+        MAX_SPEED = atoi(argv[4]);
+    
+
+
     cerr << "====== START IA PROGRAM " << getpid() << " ======" << endl;
     nextInputMustBe("START player");
     cin >> myPlayerNumber;
@@ -159,8 +170,11 @@ int main(int argc, char const *argv[]) {
 
         myPods.clear();
         
-        for (int i = 0; i < numberOfPods; i++) {
+        while (1) {
             getline(cin, input);
+            if (input.find("STOP turn") != string::npos) {
+                break;
+            }
             boost::split(vStr, input, boost::is_any_of(" "));
             if (myPlayerNumber == atoi(vStr[0].c_str())) {
                 Pod p = Pod();
@@ -173,7 +187,6 @@ int main(int argc, char const *argv[]) {
                 myPods.push_back(p);
             }
         }
-        nextInputMustBe("STOP turn");
         
         cout << "START action" << endl;
 
@@ -194,10 +207,8 @@ int main(int argc, char const *argv[]) {
             }
             float rotation = getRotation(pod, vCp.at(currentCP.at(i)));
             float thrust = getThrust(pod, vCp.at(currentCP.at(i)));
-            if (thrust != thrust) {
-                thrust = 0;
-            }
             cout << rotation << " " << thrust;
+            cerr << rotation << " " << thrust << endl;
             if (i == (numberOfPods - 1)) {
                 cout << endl;
             } else {
